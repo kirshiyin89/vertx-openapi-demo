@@ -67,8 +67,8 @@ public class MainVerticle extends AbstractVerticle {
       .handler(routingContext -> {
         String param = ((RequestParameters) routingContext.get(ValidationHandler.REQUEST_CONTEXT_KEY)).pathParameter("id").getInteger().toString();
         getUserById(param)
-          .onComplete(promotion -> {
-            String json = Optional.ofNullable(promotion.result()).map(Json::encode).orElse("{}");
+          .onComplete(userAsyncResult -> {
+            String json = Optional.ofNullable(userAsyncResult.result()).map(Json::encode).orElse("{}");
             prepareResponse(routingContext, 200, json);
           })
           .onFailure(cause -> prepareResponse(routingContext, 500, cause.getMessage()));
