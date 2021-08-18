@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: VertxAPI
+  version: '1.0'
+  description: Get users for Vertx demo
+  contact:
+    name: kirshiyin
+  x-logo:
+    url: ''
+servers:
+  - url: https://api.example.io
+paths:
+  /getUsers:
+    summary: ''
+    description: Gets all users
+    get:
+      tags: []
+      responses:
+        200:
+          description: ''
+          x-last-modified: 1624466472367
+      operationId: getUsers
+    x-last-modified: 1624457556171
+  /getUser/{id}:
+    description: Gets a single user
+    get:
+      tags: []
+      responses:
+        '200':
+          x-last-modified: 1624466501685
+          description: desc
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: number
+                description: ''
+                example: ''
+                externalDocs:
+                  url: ''
+                  description: ''
+              example: ''
+          links: {}
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          description: The User
+          required: true
+          schema:
+            type: number
+    parameters:
+      - deprecated: false
+        name: id
+        schema:
+          type: number
+        in: path
+        required: true
+        x-last-modified: 1624465813677
+    x-last-modified: 1624460845763
+components:
+  schemas:
+    user:
+      type: string
+      x-last-modified: 1624457845025
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: number
+      description: ok response
+      x-last-modified: 1624466018970
+  securitySchemes: {}
+  headers: {}
+  parameters: {}
