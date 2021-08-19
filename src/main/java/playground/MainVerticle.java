@@ -46,19 +46,13 @@ public class MainVerticle extends AbstractVerticle {
     pool(vertx, connectOptions, poolOptions);
   }
 
-  /**
-   * prepare the result/response
-   *
-   * @param routingContext the routing context
-   * @param code           the result code
-   * @param response       the result as string
-   */
-  private void prepareResponse(RoutingContext routingContext, int code, String response) {
+
+  private void prepareResponse(RoutingContext routingContext, int code, Object response) {
     routingContext
       .response()
       .setStatusCode(code)
       .setStatusMessage("OK")
-      .end(response);
+      .end(Optional.ofNullable(response).map(Json::encode).orElse("{}"));
   }
 
   private void buildGetUserByIdRoute(RouterBuilder routerBuilder) {
@@ -67,9 +61,8 @@ public class MainVerticle extends AbstractVerticle {
       .handler(routingContext -> {
         String param = ((RequestParameters) routingContext.get(ValidationHandler.REQUEST_CONTEXT_KEY)).pathParameter("id").getInteger().toString();
         getUserById(param)
-          .onComplete(userAsyncResult -> {
-            String json = Optional.ofNullable(userAsyncResult.result()).map(Json::encode).orElse("{}");
-            prepareResponse(routingContext, 200, json);
+          .onSuccess(user -> {
+            prepareResponse(routingContext, 200, user);
           })
           .onFailure(cause -> prepareResponse(routingContext, 500, cause.getMessage()));
       })
@@ -82,9 +75,8 @@ public class MainVerticle extends AbstractVerticle {
     routerBuilder
       .operation(GET_ALL_USERS_OPERATION)
       .handler(routingContext -> getAllUsers()
-        .onComplete(users -> {
-          String json = Optional.ofNullable(users.result()).map(Json::encode).orElse("{}");
-          prepareResponse(routingContext, 200, json);
+        .onSuccess(users -> {
+          prepareResponse(routingContext, 200, users);
         }).onFailure(cause -> prepareResponse(routingContext, 500, cause.getMessage())));
   }
 
